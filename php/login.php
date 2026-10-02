@@ -6,21 +6,15 @@
         $password = $_POST["password"];
 
         require_once "database.php";
+        require_once "userFunctions.php";
 
-        $sql = "SELECT Id, Username, Email, Password
-            FROM users
-            WHERE email = ?";
+        $user = getUserByEmail($conn, $email);
 
-        $stmt = $conn->prepare($sql);
-
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-
-        $result = $stmt->get_result();
-
-        $user = $result->fetch_assoc();
         if ($user) {
+        
             if (password_verify($password, $user["Password"])){
+                
+                session_regenerate_id(true);
 
                 $_SESSION["user_id"] = $user["Id"];
 

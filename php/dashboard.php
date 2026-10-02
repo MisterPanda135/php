@@ -1,29 +1,15 @@
 <?php 
     session_start();
 
-    if (!isset($_SESSION["user_id"])) {
-        header("Location: login.php");
-        exit;
-    }
+    require_once "auth.php";
+    requireLogin();
 
     require_once "database.php";
+    require_once "userFunctions.php";
 
     $userId = $_SESSION["user_id"];
 
-    $sql = "SELECT Id, Username, Email
-            FROM users
-            WHERE Id = ?";
-
-    $stmt = $conn->prepare($sql);
-
-    $stmt->bind_param("i", $userId);
-    $stmt->execute();
-
-    $result = $stmt->get_result();
-    if ($result->num_rows === 0) {
-        echo "hey";
-    }
-    $user = $result->fetch_assoc();
+    $user = getUserById($conn, $userId);
 
     $username = $user["Username"];
     $email = $user["Email"];
@@ -43,22 +29,21 @@
 
 <body>
 
-    <!-- Navigation -->
     <header class="navbar">
 
         <a href="dashboard.php" class="logo">
-            Logo
+            MyApp
         </a>
 
         <nav>
             <a href="dashboard.php">Dashboard</a>
+            <a href="users.php">Users</a>
+            <a href="profile.php">Profile</a>
             <a href="logout.php">Logout</a>
         </nav>
 
     </header>
 
-
-    <!-- Main content -->
     <main class="container">
 
         <div class="page-header">
@@ -68,12 +53,36 @@
             </div>
         </div>
 
-
-        <!-- Dashboard cards -->
         <div class="dashboard-grid">
 
             <div class="dashboard-card">
-                <h2>Account info</h2>
+                <h2>Users</h2>
+
+                <p>
+                    Manage the users in your application.
+                </p>
+
+                <a href="users.php" class="button">
+                    Manage Users
+                </a>
+            </div>
+
+
+            <div class="dashboard-card">
+                <h2>My Profile</h2>
+
+                <p>
+                    View and manage your account information.
+                </p>
+
+                <a href="profile.php" class="button secondary">
+                    View Profile
+                </a>
+            </div>
+
+
+            <div class="dashboard-card">
+                <h2>Account</h2>
 
                 <p>
                     <strong>Username:</strong>

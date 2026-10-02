@@ -350,7 +350,19 @@ tr:last-child td {
 
     color: #176b17;
 }
+/* =========================
+   PROFILE
+========================= */
 
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.profile-grid .form-container {
+    margin: 0;
+}
 
 /* =========================
    RESPONSIVE
